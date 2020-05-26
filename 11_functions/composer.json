@@ -1,0 +1,12 @@
+{
+    "name": "andrey/11_functions",
+    "authors": [
+        {
+            "name": "Andrey Popov",
+            "email": "andpop@mail.ru"
+        }
+    ],
+    "require": {
+        "funct/funct": "^1.5"
+    }
+}

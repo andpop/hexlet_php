@@ -5,9 +5,6 @@ namespace App;
 class PasswordValidator
 {
     // BEGIN (write your solution here)
-    private $valueMustContainNumbers = false;
-    private $valueMinLength = 8;
-
     private $checkOptions = [
         'containNumbers' => [
             'methodName' => 'checkNumbers',
@@ -21,40 +18,39 @@ class PasswordValidator
         ]
     ];
 
-    private function checkNumbers($value)
+    private function checkNumbers($password, $value)
     {
-        echo "Check numbers with {$value}\n";
-        return false;
+        return ($value === true) ? $this->hasNumber($password) : true;
     }
 
-    private function checkMinLength($value)
+    private function checkMinLength($password, $value)
     {
-        echo "Check min length with {$value}\n";
-        return false;
+        return mb_strlen($password) >= $value;
     }
 
     public function __construct(array $options = [])
     {
         foreach ($options as $option => $value) {
-            if (array_key_exists('option', $this->checkOptions)) {
-                $this->checkOptions[$option] = $value;
+            if (array_key_exists($option, $this->checkOptions)) {
+                $this->checkOptions[$option]['value'] = $value;
             }
         }
     }
 
     public function validate($password)
     {
-        $result = [];
+        $errors = [];
 
         foreach ($this->checkOptions as $optionName => $option) {
             $method = $option['methodName'];
             $value = $option['value'];
-            if (!$this->$method($value)) {
-                $result[$optionName] = $option['failMessage'];
+
+            if (!$this->$method($password, $value)) {
+                $errors[$optionName] = $option['failMessage'];
             }
         }
         
-        return $result;
+        return $errors;
     }
     // END
 
@@ -64,5 +60,5 @@ class PasswordValidator
     }
 }
 
-$validator = new PasswordValidator();
+$validator = new PasswordValidator(['containNumbers' => true]);
 print_r($validator->validate('qwerty'));

@@ -1,0 +1,15 @@
+{
+    "name": "andrey/07_carbon",
+    "authors": [
+        {
+            "name": "Andrey Popov",
+            "email": "andpop@mail.ru"
+        }
+    ],
+    "autoload": {
+        "psr-4": {"App\\": "src/"}
+    },
+    "require": {
+        "nesbot/carbon": "^2.35"
+    }
+}

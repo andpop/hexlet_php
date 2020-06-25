@@ -27,8 +27,7 @@ class Booking
             return false;
         }
 
-        foreach ($this->bookedDates as $currentDate) {
-            list($currentStartDate, $currentEndDate) = $currentDate;
+        foreach ($this->bookedDates as [$currentStartDate, $currentEndDate]) {
             if (!($startDate->greaterThanOrEqualTo($currentEndDate) || $endDate->lessThanOrEqualTo($currentStartDate))) {
                 return false;
             }

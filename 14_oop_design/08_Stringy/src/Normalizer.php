@@ -4,25 +4,20 @@ namespace App\Normalizer;
 
 require __DIR__ . '/../vendor/autoload.php';
 
+use Tightenco\Support\Collection;
+
 use function Stringy\create as s;
 
 // BEGIN (write your solution here)
-use Tightenco\Support\Collection;
 
 function getQuestions($text)
 {
-    $result = '';
-    $lines = collect(s($text)->lines());
-    $questions = $lines->filter(fn($line) => $line->endsWith('?'));
-    $questions->dump();
+    $result = collect(s($text)->lines())
+        ->filter(fn($line) => $line->endsWith('?'))
+        ->map(fn($val) => (string)$val)
+        ->join("\n");
 
-    // foreach ($lines as $line) {
-    //     if ($line->endsWith('?')) {
-    //         echo $line . PHP_EOL;
-    //     }
-    // }
-
-    return "dfdf";
+    return $result;
 }
 // END
 

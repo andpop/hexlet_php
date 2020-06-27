@@ -1,0 +1,18 @@
+{
+    "name": "andrey/02",
+    "authors": [
+        {
+            "name": "Andrey Popov",
+            "email": "andpop@mail.ru"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/hexlet-components/php-immutable-fs-trees"
+        }
+    ],
+    "require": {
+        "hexlet/trees": "dev-master"
+    }
+}

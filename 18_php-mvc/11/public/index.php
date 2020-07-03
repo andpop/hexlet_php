@@ -23,10 +23,17 @@ $app->get('/', function ($request, $response) {
     return $this->get('renderer')->render($response, 'index.phtml');
 });
 
-$app->get('/users', function ($request, $response) use ($users) {
-    return $this->get('renderer')->render($response, 'users/index.phtml', $users);
-});
 // BEGIN (write your solution here)
+$app->get('/users', function ($request, $response) use ($users) {
+    $params = ['users' => $users];
+    return $this->get('renderer')->render($response, 'users/index.phtml', $params);
+});
+
+$app->get('/users/{id}', function ($request, $response, $args) use ($users) {
+    $id = $args['id'];
+    $user = collect($users)->firstWhere('id', $id);
+    return $this->get('renderer')->render($response, 'users/show.phtml', ['user' => $user]);
+});
 
 // END
 

@@ -1,0 +1,11 @@
+<!-- BEGIN (write your solution here) -->
+<form method="get">
+    <input type="search" name="user" value="<?= $searchString ?>">
+    <input type="submit" value="Найти">
+</form>
+<?php foreach ($users as $user): ?>
+    <div>
+        <?= $user ?>
+    </div>
+<?php endforeach ?>
+<!-- END -->

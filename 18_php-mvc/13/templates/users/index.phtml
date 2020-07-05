@@ -1,0 +1,13 @@
+<a href="/users">Все Пользователи</a>
+
+<!-- BEGIN (write your solution here) -->
+<form method="get">
+    <input type="search" name="term" value="<?= $term ?>">
+    <input type="submit" value="Найти">
+</form>
+<?php foreach ($users as $user): ?>
+    <div>
+        <?= htmlspecialchars($user['firstName']) ?>
+    </div>
+<?php endforeach ?>
+<!-- END -->

@@ -13,7 +13,7 @@ class Validator implements ValidatorInterface
             $errors['title'] = "Can't be blank";
         }
 
-        if (empty($course['paid'])) {
+        if ($course['paid'] === '') {
             $errors['paid'] = "Can't be blank";
         }
 

@@ -42,7 +42,7 @@ $app->get('/courses/new', function ($request, $response) {
 $app->post('/courses', function ($request, $response) use ($repo) {
     $course = $request->getParsedBodyParam('course');
 
-    $validator = new Validator();
+    $validator = new \App\Validator();
     $errors = $validator->validate($course);
 
     if (empty($errors)) {

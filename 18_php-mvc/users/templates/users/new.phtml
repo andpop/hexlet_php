@@ -1,0 +1,23 @@
+<!-- BEGIN (write your solution here) -->
+<form action="/users" method="post">
+    <label for="nicknme">
+        Название
+        <input type="text" name="user[nickname]" value="<?= htmlspecialchars($user['nickname']) ?>">
+    </label>
+    <?php if (isset($errors['nickname'])): ?>
+        <div><?= $errors['nickname'] ?></div>
+    <?php endif ?>
+
+    <label for="nicknme">
+        Название
+        <input type="text" name="user[nickname]" value="<?= htmlspecialchars($user['nickname']) ?>">
+    </label>
+    <?php if (isset($errors['nickname'])): ?>
+        <div><?= $errors['nickname'] ?></div>
+    <?php endif ?>
+    
+    <br>
+    <br>
+    <input type="submit" value="Сохранить">
+</form>
+<!-- END -->

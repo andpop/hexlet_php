@@ -22,11 +22,15 @@ $app->get('/', function ($request, $response) {
     return $this->get('renderer')->render($response, 'index.phtml');
 });
 
-$app->get('/users', function ($request, $response) {
-    $encodedUsers = explode("\n", file_get_contents(DATA_FILE));
-    $users = array_map(fn ($user) => json_decode($user, true), $encodedUsers);
+$app->get('/users/{id:[0-9]+}', function ($request, $response, $args) {
+    userExists('dfdfd');
 
-    $params = [ 'users' => $users ];
+    // $params = [ 'users' => loadUsers() ];
+    // return $this->get('renderer')->render($response, 'users/index.phtml', $params);
+});
+
+$app->get('/users', function ($request, $response) {
+    $params = [ 'users' => loadUsers() ];
     return $this->get('renderer')->render($response, 'users/index.phtml', $params);
 })->setName('users');
 
@@ -43,7 +47,7 @@ $app->get('/users/new', function ($request, $response) {
 
 $app->post('/users', function ($request, $response) use ($router) {
     $user = $request->getParsedBodyParam('user');
-    $user['id'] = uniqid();
+    $user['id'] = abs(crc32(uniqid()));
 
 
     $validator = new \App\Validator();

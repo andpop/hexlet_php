@@ -6,7 +6,7 @@ use App\Validator;
 use Slim\Factory\AppFactory;
 use DI\Container;
 
-$repo = new App\CourseRepository();
+const DATA_FILE = __DIR__ . '/../data/users.dat';
 
 $container = new Container();
 $container->set('renderer', function () {
@@ -16,50 +16,53 @@ $container->set('renderer', function () {
 $app = AppFactory::createFromContainer($container);
 $app->addErrorMiddleware(true, true, true);
 
+$router = $app->getRouteCollector()->getRouteParser();
+
 $app->get('/', function ($request, $response) {
     return $this->get('renderer')->render($response, 'index.phtml');
 });
 
-$app->get('/users', function ($request, $response) use ($repo) {
-    $params = [
-        'courses' => $repo->all()
-    ];
-    return $this->get('renderer')->render($response, 'courses/index.phtml', $params);
-});
+$app->get('/users', function ($request, $response) {
+    $encodedUsers = explode("\n", file_get_contents(DATA_FILE));
+    $users = array_map(fn ($user) => json_decode($user, true), $encodedUsers);
 
-// BEGIN (write your solution here)
-$app->get('/courses/new', function ($request, $response) {
+    $params = [ 'users' => $users ];
+    return $this->get('renderer')->render($response, 'users/index.phtml', $params);
+})->setName('users');
+
+$app->get('/users/new', function ($request, $response) {
     $params = [
-        'course' => [
-            'title' => '',
-            'paid' => ''
+        'user' => [
+            'nickname' => '',
+            'email' => ''
         ],
         'errors' => []
     ];
-    return $this->get('renderer')->render($response, 'courses/new.phtml', $params);
-});
+    return $this->get('renderer')->render($response, 'users/new.phtml', $params);
+})->setName('newUserForm');
 
-$app->post('/courses', function ($request, $response) use ($repo) {
-    $course = $request->getParsedBodyParam('course');
+$app->post('/users', function ($request, $response) use ($router) {
+    $user = $request->getParsedBodyParam('user');
+    $user['id'] = uniqid();
+
 
     $validator = new \App\Validator();
-    $errors = $validator->validate($course);
+    $errors = $validator->validate($user);
 
     if (empty($errors)) {
-        $repo->save($course);
-        return $response->withRedirect('/courses');
+        file_put_contents(DATA_FILE, json_encode($user)."\n", FILE_APPEND);
+
+        return $response->withRedirect($router->urlFor('users'));
     }
 
     $params = [
-        'course' => $course,
+        'user' => $user,
         'errors' => $errors
     ];
 
     $response = $response->withStatus(422);
 
-    return $this->get('renderer')->render($response, 'courses/new.phtml', $params);
-});
-
-// END
+    return $this->get('renderer')->render($response, 'users/new.phtml', $params);
+})->setName('saveUser');
 
 $app->run();

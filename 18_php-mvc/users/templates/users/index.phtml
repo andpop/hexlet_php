@@ -1,7 +1,11 @@
-<a href="/courses/new">Новый курс</a>
+<a href="/users/new">Новый пользователь</a>
 
-<?php foreach ($courses as $course): ?>
-  <div>
-    <?= htmlspecialchars($course['title']) ?>
-  </div>
+<table>
+<?php foreach ($users as $user): ?>
+  <tr>
+    <td><?= htmlspecialchars($user['id']) ?></td>
+    <td><?= htmlspecialchars($user['nickname']) ?></td>
+    <td><?= htmlspecialchars($user['email']) ?></td>
+  </tr>
 <?php endforeach ?>
+</table>

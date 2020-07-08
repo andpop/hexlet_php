@@ -5,8 +5,14 @@ function loadUsers(): array
     return array_map(fn($user) => json_decode($user, true), $encodedUsers);
 }
 
-function userExists($nickname)
+function userExists(int $id): bool
 {
     $users = collect(loadUsers());
-    var_dump($users);
+
+    return (bool)$users->firstWhere('id', $id);
+}
+
+function loadUser(int $id): array
+{
+    return collect(loadUsers()) ->firstWhere('id', $id);
 }

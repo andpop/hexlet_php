@@ -23,10 +23,17 @@ $app->get('/', function ($request, $response) {
 });
 
 $app->get('/users/{id:[0-9]+}', function ($request, $response, $args) {
-    userExists('dfdfd');
+    if (userExists((int)$args['id'])) {
+        $params = [
+            'user' => loadUser($args['id'])
+            ];
+        return $this->get('renderer')->render($response, 'users/user.phtml', $params);
+    }
+    
+    $message = "Ресурс не найден";
+    $params = ['message' => $message];
 
-    // $params = [ 'users' => loadUsers() ];
-    // return $this->get('renderer')->render($response, 'users/index.phtml', $params);
+    return $this->get('renderer')->render($response, '402.phtml', $params)->withStatus(402);
 });
 
 $app->get('/users', function ($request, $response) {

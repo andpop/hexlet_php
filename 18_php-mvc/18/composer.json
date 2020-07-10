@@ -1,0 +1,24 @@
+{
+    "name": "andrey/18_08",
+    "authors": [
+        {
+            "name": "Andrey Popov",
+            "email": "andpop@mail.ru"
+        }
+    ],
+    "autoload": {
+        "psr-4": {"App\\": "src/"}
+    },
+    "require": {
+        "slim/slim": "*",
+        "slim/psr7": "*",
+        "slim/http": "*",
+        "guzzlehttp/guzzle": "*",
+        "fzaninotto/faker": "*",
+        "slim/php-view": "^2.2",
+        "php-di/php-di": "^6.2",
+        "tightenco/collect": "^7.12",
+        "danielstjules/stringy": "^3.1",
+        "slim/flash": "^0.4.0"
+    }
+}

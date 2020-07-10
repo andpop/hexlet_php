@@ -1,0 +1,7 @@
+<a href="/courses">Курсы</a>
+
+<?php if (!empty($flashMessages)) : ?>
+  <?php foreach ($flashMessages as $message) : ?>
+    <div style="border: 1px solid green;"><?= $message ?></div>
+  <?php endforeach; ?>
+<?php endif; ?>

@@ -1,5 +1,11 @@
 <a href="/users/new">Новый пользователь</a>
 
+<?php if (!empty($flashMessages)) : ?>
+  <?php foreach ($flashMessages as $message) : ?>
+    <div style="border: 1px solid green;"><?= $message ?></div>
+  <?php endforeach; ?>
+<?php endif; ?>
+
 <table>
 <?php foreach ($users as $user): ?>
   <tr>

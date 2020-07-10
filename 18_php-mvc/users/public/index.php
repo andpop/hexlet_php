@@ -6,11 +6,16 @@ use App\Validator;
 use Slim\Factory\AppFactory;
 use DI\Container;
 
+session_start();
+
 const DATA_FILE = __DIR__ . '/../data/users.dat';
 
 $container = new Container();
 $container->set('renderer', function () {
     return new \Slim\Views\PhpRenderer(__DIR__ . '/../templates');
+});
+$container->set('flash', function() {
+    return new \Slim\Flash\Messages();
 });
 
 $app = AppFactory::createFromContainer($container);
@@ -18,15 +23,14 @@ $app->addErrorMiddleware(true, true, true);
 
 $router = $app->getRouteCollector()->getRouteParser();
 
+// ======================================================================
 $app->get('/', function ($request, $response) {
     return $this->get('renderer')->render($response, 'index.phtml');
 });
 
 $app->get('/users/{id:[0-9]+}', function ($request, $response, $args) {
     if (userExists((int)$args['id'])) {
-        $params = [
-            'user' => loadUser($args['id'])
-            ];
+        $params = [ 'user' => loadUser($args['id']) ];
         return $this->get('renderer')->render($response, 'users/user.phtml', $params);
     }
     
@@ -37,7 +41,13 @@ $app->get('/users/{id:[0-9]+}', function ($request, $response, $args) {
 });
 
 $app->get('/users', function ($request, $response) {
-    $params = [ 'users' => loadUsers() ];
+    $flashMessages = $this->get('flash')->getMessages();
+    $successMessages = empty($flashMessages) ? [] : $flashMessages['success'];
+    $params = [ 
+        'users' => loadUsers(),
+        'flashMessages' => $successMessages
+    ];
+    
     return $this->get('renderer')->render($response, 'users/index.phtml', $params);
 })->setName('users');
 
@@ -62,6 +72,7 @@ $app->post('/users', function ($request, $response) use ($router) {
 
     if (empty($errors)) {
         file_put_contents(DATA_FILE, json_encode($user)."\n", FILE_APPEND);
+        $this->get('flash')->addMessage('success', "Пользователь {$user['nickname']} добавлен");
 
         return $response->withRedirect($router->urlFor('users'));
     }

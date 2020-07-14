@@ -1,3 +1,14 @@
 <!-- BEGIN (write your solution here) -->
-
+<table>
+<?php foreach ($posts as $post) : ?>
+    <tr>
+        <td><a href="/posts/<?= $post['id'] ?>"><?= htmlspecialchars($post['id']) ?></a></td>
+        <td><?= htmlspecialchars($post['name']) ?></td>
+        <td><?= htmlspecialchars($post['body']) ?></td>
+    </tr>
+<?php endforeach; ?>
+</table>
+<br>
+<a href="/posts?page=<?= $prevPage ?>">Назад</a>
+<a href="/posts?page=<?= $nextPage ?>">Вперед</a>
 <!-- END -->

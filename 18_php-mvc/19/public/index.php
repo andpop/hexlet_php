@@ -23,15 +23,30 @@ $app->get('/', function ($request, $response) {
 
 $app->get('/posts', function ($request, $response) use ($repo) {
     $page = (int)$request->getQueryParam('page', 1);
-    $posts = collect($repo->all())->chunk(5)[$page - 1]->values()->all();
+    $per = 5;
+    $nextPage = $page + 1; // Здесь тоже нужно проверку на максимальный номер страницы ставить
+    $prevPage = $page > 1 ? $page - 1 : 1;
+    $posts = collect($repo->all())->chunk($per)[$page - 1]->values()->all();
     $params = [
         'posts' => $posts,
-        'currentPage' => $page
-    ]
-    var_dump($posts);
+        'prevPage' => $prevPage,
+        'nextPage' => $nextPage
+    ];
 
-    return $this->get('renderer')->render($response, 'index.phtml');
-});
+    return $this->get('renderer')->render($response, 'posts/index.phtml', $params);
+})->setName('posts');
+
+$app->get('/posts/{id}', function ($request, $response, $args) use ($repo) {
+    $id = $args['id'];
+
+    $post = collect($repo->all())->firstWhere('id', $id);
+    if (!$post) {
+        return $response->withStatus(404)->write('Page not found');
+    }
+
+    $params = $post;
+    return $this->get('renderer')->render($response, 'posts/show.phtml', $params);
+})->setName('post');
 // END
 
 $app->run();

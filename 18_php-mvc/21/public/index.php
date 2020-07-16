@@ -65,7 +65,44 @@ $app->post('/posts', function ($request, $response) use ($repo, $router) {
 });
 
 // BEGIN (write your solution here)
+$app->get('/posts/{id}/edit', function ($request, $response, array $args) use ($repo) {
+    $id = $args['id'];
+    $post = $repo->find($id);
+    $params = [
+        'postData' => $post,
+        'errors' => []
+    ];
+    return $this->get('renderer')->render($response, 'posts/edit.phtml', $params);
+})->setName('editPost');
 
+$app->patch('/posts/{id}', function ($request, $response, array $args) use ($repo, $router) {
+    $id = $args['id'];
+    $post = $repo->find($id);
+    $formData = $request->getParsedBodyParam('post');
+
+    $validator = new App\Validator();
+    $errors = $validator->validate($formData);
+
+    if (count($errors) === 0) {
+        // Ручное копирование данных из формы в нашу сущность
+        $post['name'] = $formData['name'];
+        $post['body'] = $formData['body'];
+
+        $this->get('flash')->addMessage('success', 'Post has been updated');
+        $repo->save($post);
+        $url = $router->urlFor('editPost', ['id' => $post['id']]);
+        return $response->withRedirect($url);
+    }
+
+    $formData['id'] = $id;
+    $params = [
+        'postData' => $formData,
+        'errors' => $errors
+    ];
+
+    $response = $response->withStatus(422);
+    return $this->get('renderer')->render($response, 'posts/edit.phtml', $params);
+});
 // END
 
 $app->run();

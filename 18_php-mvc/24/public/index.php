@@ -53,7 +53,7 @@ $app->post('/cart-items', function ($request, $response) {
 });
 
 $app->delete('/cart-items', function ($request, $response) {
-    $cart = json_decode([]);
+    $cart = json_decode('');
     return $response->withHeader('Set-Cookie', "cart={$cart}")->withRedirect('/');
 });
 // END

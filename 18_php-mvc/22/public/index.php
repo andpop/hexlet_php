@@ -4,7 +4,7 @@ use Slim\Factory\AppFactory;
 use DI\Container;
 use Slim\Middleware\MethodOverrideMiddleware;
 
-require '/composer/vendor/autoload.php';
+require __DIR__ . '/../vendor/autoload.php';
 
 $container = new Container();
 $container->set('renderer', function () {
@@ -66,7 +66,12 @@ $app->post('/posts', function ($request, $response) use ($repo, $router) {
 });
 
 // BEGIN (write your solution here)
-
+$app->delete('/posts/{id}', function ($request, $response, array $args) use ($repo, $router) {
+    $id = $args['id'];
+    $repo->destroy($id);
+    $this->get('flash')->addMessage('success', 'Post has been removed');
+    return $response->withRedirect($router->urlFor('posts'));
+});
 // END
 
 $app->run();

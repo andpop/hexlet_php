@@ -11,5 +11,11 @@
 <a href="/posts/new">Новый пост</a>
 
 <!-- BEGIN (write your solution here) -->
+<?php foreach ($posts as $post) : ?>
+<form action="/posts/<?= $post['id'] ?>" method="post" >
+  <input type="hidden" name="_METHOD" value="DELETE">
+  <?= htmlspecialchars($post['name']) ?> <input type="submit" value="Delete">
+</form>
+<?php endforeach ?>
 
 <!-- END -->

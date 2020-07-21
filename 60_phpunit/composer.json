@@ -1,0 +1,12 @@
+{
+    "name": "andrey/60_phpunit",
+    "authors": [
+        {
+            "name": "Andrey Popov",
+            "email": "andpop@mail.ru"
+        }
+    ],
+    "require": {
+        "phpunit/phpunit": "^9.2"
+    }
+}
